@@ -1,0 +1,10 @@
+package com.jornada.backend.domain.ordemservico.repository;
+
+import com.jornada.backend.domain.ordemservico.model.EventoAgenda;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface EventoAgendaRepository extends JpaRepository<EventoAgenda, Long> {
+    List<EventoAgenda> findByUsuarioId(Long usuarioId);
+}

@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: jornada_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jornada
+      POSTGRES_USER: jornada
+      POSTGRES_PASSWORD: jornada
+    ports:
+      - "5432:5432"
+    volumes:
+      - jornada_db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jornada_backend
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/jornada
+      DATABASE_USERNAME: jornada
+      DATABASE_PASSWORD: jornada
+      SPRING_PROFILES_ACTIVE: default
+      APP_SKIP_DATA_SEED: "true"
+      APP_AUTH_BYPASS: "true"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  jornada_db_data:
